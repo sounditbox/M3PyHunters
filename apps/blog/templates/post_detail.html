@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <a href="{% url 'blog:post_list' %}">
+        <button class="btn btn-secondary">
+            Back to posts
+        </button>
+    </a>
+    <div class="container">
+        <h1 class="display-4">{{ post.title }}</h1>
+        <p>{{ post.content }}</p>
+        <br>
+        <a href="{% url 'blog:comments' post.id %}">
+            <button class="btn btn-primary">
+                View comments
+            </button>
+        </a>
+    </div>
+
+{% endblock %}

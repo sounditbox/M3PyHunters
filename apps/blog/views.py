@@ -1,3 +1,5 @@
+from typing import Any
+
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 from django.urls import reverse
@@ -35,47 +37,37 @@ pseudo_db = {
 
 def get_post(request: HttpRequest, post_id: int) -> HttpResponse:
     if post_id not in pseudo_db['posts']:
-        return HttpResponse('<h1 style="color: red;">Post not found</h1>')
+        return render(request, '404.html', {'instance': f'Post {post_id}'})
     post = pseudo_db['posts'][post_id]
 
-    response = f'<br><a href="{reverse('blog:post_list')}">'
-    response += '<button>Back to posts</button></a>'
-
-    response += f'<h1>{post["title"]}</h1><p>{post["content"]}</p><br>'
-    response += (f'<a href="{reverse('blog:comments', args=[post_id])}">'
-                 '<button>Comments</button></a>')
-
-    return HttpResponse(response)
+    context = {
+        'post': post,
+        'title': f'Post {post["title"]}'
+    }
+    return render(request, 'post_detail.html', context)
 
 
 def get_post_comments(request, post_id):
     if post_id not in pseudo_db['posts']:
-        return HttpResponse('<h1 style="color: red;">Post not found</h1>')
-    # comments = list(filter(lambda c: c['post_id'] == post_id, pseudo_db['comments'].values()))
+        return render(request, '404.html', {'instance': f'Post {post_id}'})
     comments = [c for c in pseudo_db['comments'].values() if
                 c['post_id'] == post_id]
+    context = {
+        'comments': comments,
+        'post_id': post_id,
+        'title': f'Comments for post {post_id}'
+    }
 
-    response = f'<a href="{reverse('blog:post_detail', args=[post_id])}">'
-    response += '<button>Back to post</button></a>'
-
-    response += f'<h1>Comments for post {post_id}</h1>'
-    for c in comments:
-        response += f'<p>{c["content"]}</p>'
-
-    return HttpResponse(response)
+    return render(request, 'comment_list.html', context)
 
 
 def post_list(request: HttpRequest) -> HttpResponse:
     posts = [p for p in pseudo_db['posts'].values()]
-    response = '<h1>All Posts</h1>'
-    for p in posts:
-        response += (f'<a href="{reverse('blog:post_detail', args=[p['id']])}">'
-                     f'<h2>{p["title"]}</h2>'
-                     f'</a>')
-    response = HttpResponse(response)
-    response['My-Custom-Header'] = 'Custom Value'
-    response.status_code = 418
-    return response
+    context: dict[str, Any] = {
+        'title': 'All posts',
+        'posts': posts,
+    }
+    return render(request, 'post_list.html', context)
 
 
 @csrf_exempt
