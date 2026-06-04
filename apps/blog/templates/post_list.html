@@ -21,4 +21,14 @@
         {% endfor %}
     </ul>
 </div>
+
+<div class="container">
+    <h2>Create new post</h2>
+    <form action="{% url 'blog:post_list' %}" class="d-flex flex-column" method="post">
+        {% csrf_token %}
+        <input class="m-2" type="text" name="title" placeholder="Title">
+        <input class="m-2" type="text" name="content" placeholder="Content">
+        <button class="btn btn-primary" type="submit">Create post</button>
+    </form>
+</div>
 {% endblock %}
