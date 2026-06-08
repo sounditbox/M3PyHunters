@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block content %}
 <div class="container">
     <h1 class="display-4">{{ title }}</h1>
@@ -8,11 +8,25 @@
         <li class="list-group-item">
 
             <h2>
-                {{ forloop.counter }}. {{ post.title }}
+                {{ post.title }}
             </h2>
-            <a href="{% url 'blog:post_detail' post.id %}">
-                <button class="btn btn-primary">View Post</button>
+            <p>{{ post.content | truncatewords:50 }}</p>
+            <a class="btn btn-primary m-1" href="{% url 'blog:post_detail' post.id %}">
+                Читать далее
             </a>
+
+            <button class="btn btn-danger m-1">
+                <img src="{% static 'trash.svg' %}" alt="Eye" width="20"
+                     height="20">
+            </button>
+            <div class="d-flex align-items-center">
+                <img class="m-1" src="{% static 'eye.svg' %}" alt="Eye" width="20"
+                     height="20">
+                <span class="m-1">{{ post.views|default:0 }}</span>
+                <img class="m-1" src="{% static 'thumbs-up.svg' %}" alt="Heart" width="20"
+                     height="20">
+                <span class="m-1">{{ post.likes|default:0 }}</span>
+            </div>
         </li>
         {% empty %}
         <li class="list-group-item">
@@ -22,13 +36,4 @@
     </ul>
 </div>
 
-<div class="container">
-    <h2>Create new post</h2>
-    <form action="{% url 'blog:post_list' %}" class="d-flex flex-column" method="post">
-        {% csrf_token %}
-        <input class="m-2" type="text" name="title" placeholder="Title">
-        <input class="m-2" type="text" name="content" placeholder="Content">
-        <button class="btn btn-primary" type="submit">Create post</button>
-    </form>
-</div>
 {% endblock %}

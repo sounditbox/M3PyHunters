@@ -1,15 +1,20 @@
 from typing import Any
 
-from django.http import HttpRequest, HttpResponse
+from django.http import HttpRequest
 from django.shortcuts import render, redirect
 from django.views import View
-from django.views.generic import TemplateView
+from django.views.generic import FormView
+
+from apps.blog.forms import PostCreateForm
 
 pseudo_db = {
     'posts': {
-        1: {'id': 1, 'title': 'Post 1', 'content': 'Content 1'},
-        2: {'id': 2, 'title': 'Post 2', 'content': 'Content 2'},
-        3: {'id': 3, 'title': 'New Post', 'content': 'New Content'},
+        1: {'id': 1, 'title': 'Post 1', 'content': 'Content 1',
+            'created_at': '2023-01-01T00:00:00', 'likes': 1, 'views': 42},
+        2: {'id': 2, 'title': 'Post 2', 'content': 'Content 2',
+            'created_at': '2023-01-01T00:00:00', 'likes': 12, 'views': 76},
+        3: {'id': 3, 'title': 'New Post', 'content': 'New Content',
+            'created_at': '2023-01-01T00:00:00', 'likes': 43, 'views': 56},
     },
     'comments': {
         1: {'post_id': 1, 'content': 'Comment 1'},
@@ -42,7 +47,6 @@ class PostDetailView(View):
             'title': f'Post {post["title"]}'
         }
         return render(request, 'post_detail.html', context)
-
 
 
 # def get_post_comments(request, post_id):
@@ -132,3 +136,28 @@ class PostListView(View):
 #         new_post = {'id': len(pseudo_db['posts']) + 1, 'title': title, 'content': content}
 #         pseudo_db['posts'][new_post['id']] = new_post
 #         return redirect('blog:post_list')
+
+class PostCreateView(View):
+    def get(self, request):
+        return render(self.request, 'create_post.html')
+
+    def post(self, request):
+        title = request.POST.get('title')
+        content = request.POST.get('content')
+        post_id = len(pseudo_db['posts']) + 1
+        new_post = {'id': post_id, 'title': title,
+                    'content': content}
+        pseudo_db['posts'][new_post['id']] = new_post
+        return redirect('blog:post_detail', post_id=post_id)
+
+# class PostCreateView(FormView):
+#     template_name = 'create_post.html'
+#     form_class = PostCreateForm
+#     success_url = 'blog:post_list'
+#
+#     def form_valid(self, form):
+#         title = form.cleaned_data['title']
+#         content = form.cleaned_data['content']
+#         new_post = {'id': len(pseudo_db['posts']) + 1, 'title': title,
+#                     'content': content}
+#         pseudo_db['posts'][new_post['id']] = new_post

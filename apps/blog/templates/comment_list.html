@@ -1,5 +1,9 @@
 {% extends 'base.html' %}
 
+{% block title %}
+    Comments | {{ site_name }}
+{% endblock %}
+
 {% block content %}
 <a href="{% url 'blog:post_detail' post_id %}">
     <button class="btn btn-secondary">

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{{ title }}</title>
+    <title>{% block title %}{{ title }}{% endblock %}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
           rel="stylesheet"
           integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
@@ -11,9 +11,12 @@
     {% endblock %}
 </head>
 <body>
+{% include 'includes/header.html' %}
 {% block content %}
 Default content (override me)
 {% endblock %}
+
+{% include 'includes/footer.html' %}
 
 {% block js %}
 {% endblock %}

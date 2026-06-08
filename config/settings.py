@@ -42,6 +42,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'apps.blog.context_processors.current_year',
+                'apps.blog.context_processors.site_name',
             ],
         },
     },
@@ -85,3 +87,6 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+SITE_NAME = 'PyBlog'
+
