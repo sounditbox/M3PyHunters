@@ -1,36 +1,30 @@
 {% extends 'base.html' %}
 {% load static %}
+{% block title %}{{ title }} | {{ site_name }}{% endblock %}
 {% block content %}
 <div class="container">
-    <h1 class="display-4">{{ title }}</h1>
-    <ul style="list-style-type: none;" class="list-group">
+    <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-4">
+        <h1 class="display-5 mb-0">{{ title }}</h1>
+        <a class="btn btn-primary" href="{% url 'blog:post_create' %}">Create post</a>
+    </div>
+    <ul class="list-group list-unstyled">
         {% for post in posts %}
         <li class="list-group-item">
-
-            <h2>
-                {{ post.title }}
-            </h2>
-            <p>{{ post.content | truncatewords:50 }}</p>
-            <a class="btn btn-primary m-1" href="{% url 'blog:post_detail' post.id %}">
-                Читать далее
+            <h2 class="h4">{{ post.title }}</h2>
+            <p>{{ post.content|truncatewords:50 }}</p>
+            <a class="btn btn-outline-primary" href="{% url 'blog:post_detail' post.id %}">
+                Read more
             </a>
-
-            <button class="btn btn-danger m-1">
-                <img src="{% static 'trash.svg' %}" alt="Eye" width="20"
-                     height="20">
-            </button>
-            <div class="d-flex align-items-center">
-                <img class="m-1" src="{% static 'eye.svg' %}" alt="Eye" width="20"
-                     height="20">
-                <span class="m-1">{{ post.views|default:0 }}</span>
-                <img class="m-1" src="{% static 'thumbs-up.svg' %}" alt="Heart" width="20"
-                     height="20">
-                <span class="m-1">{{ post.likes|default:0 }}</span>
+            <div class="d-flex align-items-center gap-2 mt-3 text-body-secondary">
+                <img src="{% static 'eye.svg' %}" alt="" width="20" height="20">
+                <span>{{ post.views|default:0 }}</span>
+                <img src="{% static 'thumbs-up.svg' %}" alt="" width="20" height="20">
+                <span>{{ post.likes|default:0 }}</span>
             </div>
         </li>
         {% empty %}
         <li class="list-group-item">
-            <h2>No posts found</h2>
+            <p class="mb-0">No posts found.</p>
         </li>
         {% endfor %}
     </ul>

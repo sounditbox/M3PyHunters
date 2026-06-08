@@ -39,7 +39,12 @@ pseudo_db = {
 class PostDetailView(View):
     def get(self, request, post_id):
         if post_id not in pseudo_db['posts']:
-            return render(request, '404.html', {'instance': f'Post {post_id}'})
+            return render(
+                request,
+                '404.html',
+                {'instance': f'Post {post_id}'},
+                status=404,
+            )
         post = pseudo_db['posts'][post_id]
 
         context = {
@@ -72,7 +77,12 @@ class PostDetailView(View):
 class CommentListView(View):
     def get(self, request, post_id):
         if post_id not in pseudo_db['posts']:
-            return render(request, '404.html', {'instance': f'Post {post_id}'})
+            return render(
+                request,
+                '404.html',
+                {'instance': f'Post {post_id}'},
+                status=404,
+            )
         comments = [c for c in pseudo_db['comments'].values() if
                     c['post_id'] == post_id]
         context = {
@@ -136,6 +146,7 @@ class PostListView(View):
 #         new_post = {'id': len(pseudo_db['posts']) + 1, 'title': title, 'content': content}
 #         pseudo_db['posts'][new_post['id']] = new_post
 #         return redirect('blog:post_list')
+
 
 class PostCreateView(View):
     def get(self, request):

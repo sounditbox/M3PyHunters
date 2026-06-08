@@ -2,27 +2,20 @@
 
 {% load filters %}
 
-{% block title %}
-    Post {{post.title|truncate_eco:4}} | {{ site_name }}
-
-{% endblock %}
+{% block title %}Post {{ post.title|truncate_eco:40 }} | {{ site_name }}{% endblock %}
 
 {% block content %}
-
-    <a href="{% url 'blog:post_list' %}">
-        <button class="btn btn-secondary">
-            Back to posts
-        </button>
+<div class="container">
+    <a class="btn btn-secondary mb-4" href="{% url 'blog:post_list' %}">
+        Back to posts
     </a>
-    <div class="container">
-        <h1 class="display-4">{{ post.title }}</h1>
-        <p>{{ post.content }}</p>
-        <br>
-        <a href="{% url 'blog:comments' post.id %}">
-            <button class="btn btn-primary">
-                View comments
-            </button>
-        </a>
-    </div>
+    <article>
+        <h1 class="display-5">{{ post.title }}</h1>
+        <p>{{ post.content|linebreaksbr }}</p>
+    </article>
+    <a class="btn btn-primary" href="{% url 'blog:comments' post.id %}">
+        View comments
+    </a>
+</div>
 
 {% endblock %}
