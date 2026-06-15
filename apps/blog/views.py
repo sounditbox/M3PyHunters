@@ -66,7 +66,7 @@ class PostDetailView(View):
 
 class PostListView(View):
     def get(self, request: HttpRequest):
-        posts = Post.objects.all()
+        posts = Post.objects.prefetch_related('tags').all()
         context: dict[str, Any] = {
             'title': 'All posts',
             'posts': posts,
@@ -91,7 +91,6 @@ class PostCreateView(View):
             new_post.tags.add(
                 Tag.objects.get_or_create(name=tag.strip().title())[0]
             )
-        new_post.save()
         return redirect('blog:post_detail', post_id=new_post.id)
 
 
