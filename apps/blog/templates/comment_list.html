@@ -1,15 +1,15 @@
 {% extends 'base.html' %}
 
-{% block title %}Comments | {{ site_name }}{% endblock %}
+{% block title %}Comments for post {{ post.title }} | {{ site_name }}{% endblock %}
 
 {% block content %}
 <div class="container">
-    <a class="btn btn-secondary mb-4" href="{% url 'blog:post_detail' post_id %}">
+    <a class="btn btn-secondary mb-4" href="{% url 'blog:post_detail' post.id %}">
         Back to post
     </a>
 
-    <h1 class="display-6">Comments for post {{ post_id }}</h1>
-    {% for comment in comments %}
+    <h1 class="display-6">Comments for post {{ post.id }}</h1>
+    {% for comment in post.comments.all %}
         <div class="border-bottom py-3">
             <p class="mb-0">{{ comment.content|linebreaksbr }}</p>
         </div>
@@ -18,7 +18,7 @@
     {% endfor %}
 
     <h2 class="h4 mt-4">Create new comment</h2>
-    <form action="{% url 'blog:comments' post_id %}" class="d-flex flex-column" method="post">
+    <form action="{% url 'blog:comments' post.id %}" class="d-flex flex-column" method="post">
         {% csrf_token %}
         <label class="form-label" for="comment-content">Content</label>
         <textarea class="form-control mb-3" id="comment-content" name="content" rows="4" placeholder="Content" required></textarea>

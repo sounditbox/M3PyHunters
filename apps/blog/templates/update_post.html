@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}Update post {{ post.title }} | {{ site_name }}{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <h2>Update post</h2>
+    <form action="{% url 'blog:post_update' post.id %}" method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label class="form-label" for="post-title">Title</label>
+            <input class="form-control" id="post-title" type="text" name="title" value="{{ post.title }}" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="post-content">Content</label>
+            <textarea class="form-control" id="post-content" name="content" rows="6" required>{{ post.content }}</textarea>
+        </div>
+        <button class="btn btn-primary" type="submit">Update</button>
+    </form>
+</div>
+
+{% endblock %}

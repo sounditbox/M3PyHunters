@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% load filters %}
 
 {% block title %}Post {{ post.title|truncate_eco:40 }} | {{ site_name }}{% endblock %}
@@ -13,9 +13,19 @@
         <h1 class="display-5">{{ post.title }}</h1>
         <p>{{ post.content|linebreaksbr }}</p>
     </article>
+
     <a class="btn btn-primary" href="{% url 'blog:comments' post.id %}">
         View comments
     </a>
+    <a class="btn btn-secondary" href="{% url 'blog:post_update' post.id %}">
+        Update
+    </a>
+    <form action="{% url 'blog:post_delete' post.id %}" method="post">
+        {% csrf_token %}
+        <button class="btn btn-danger" type="submit">
+            <img src="{% static 'images/trash.svg' %}" alt="Delete">
+        </button>
+    </form>
 </div>
 
 {% endblock %}
