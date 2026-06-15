@@ -11,6 +11,9 @@
         {% for post in posts %}
         <li class="list-group-item">
             <h2 class="h4">{{ post.title }}</h2>
+            {% for t in post.tags.all %}
+            <span class="badge rounded-pill text-bg-info">{{ t.name }}</span>
+            {% endfor %}
             <p>{{ post.content|truncatewords:50 }}</p>
             <a class="btn btn-outline-primary" href="{% url 'blog:post_detail' post.id %}">
                 Read more

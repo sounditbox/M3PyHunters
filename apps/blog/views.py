@@ -1,11 +1,10 @@
 from typing import Any
 
-from asgiref.sync import sync_to_async
 from django.http import HttpRequest
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 
-from apps.blog.models import Post, Comment
+from apps.blog.models import Post, Comment, Tag
 
 
 # def get_post(request: HttpRequest, post_id: int) -> HttpResponse:
@@ -52,7 +51,6 @@ from apps.blog.models import Post, Comment
 #
 #     return render(request, 'comment_list.html', context)
 
-
 class PostDetailView(View):
     def get(self, request, post_id):
         if not Post.objects.filter(id=post_id).exists():
@@ -83,9 +81,16 @@ class PostCreateView(View):
     def post(self, request):
         title = self.request.POST.get('title')
         content = self.request.POST.get('content')
+        tags = self.request.POST.get('tags').split(',')
         new_post = Post()
         new_post.title = title
         new_post.content = content
+        new_post.save()
+
+        for tag in tags:
+            new_post.tags.add(
+                Tag.objects.get_or_create(name=tag.strip().title())[0]
+            )
         new_post.save()
         return redirect('blog:post_detail', post_id=new_post.id)
 
