@@ -24,6 +24,9 @@ class Post(models.Model):
     def __str__(self):
         return f'Post {self.title}'
 
+    class Meta:
+        ordering = ['-created_at']
+
 
 class Comment(models.Model):
     post = models.ForeignKey(

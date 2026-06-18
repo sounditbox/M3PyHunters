@@ -8,18 +8,13 @@
     <h2>Create new post</h2>
     <form action="{% url 'blog:post_create' %}" method="post">
         {% csrf_token %}
-        <div class="mb-3">
-            <label class="form-label" for="post-title">Title</label>
-            <input class="form-control" id="post-title" type="text" name="title" placeholder="Title" required>
-        </div>
-        <div class="mb-3">
-            <label class="form-label" for="post-content">Content</label>
-            <textarea class="form-control" id="post-content" name="content" rows="6" placeholder="Content" required></textarea>
-        </div>
-        <div class="mb-3">
-            <label class="form-label" for="post-tags">Tags</label>
-            <input class="form-control" id="post-tags" type="text" name="tags" placeholder="Tag1, Tag2, Tag3...">
-        </div>
+        {% for field in form %}
+            <div class="mb-3">
+                <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+            </div>
+        {% endfor %}
+
         <button class="btn btn-primary" type="submit">Create post</button>
     </form>
 </div>
