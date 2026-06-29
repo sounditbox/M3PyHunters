@@ -1,0 +1,7 @@
+<nav aria-label="Page navigation example">
+  <ul class="pagination">
+    <li class="page-item"><a {% if not page_obj.has_previous %} disabled {% else %} href="?page={{ page_obj.previous_page_number }}" {% endif %} class="page-link">Previous</a></li>
+    <li class="page-item"><a class="page-link active" disabled href="#">{{ page_obj.number }}</a></li>
+    <li class="page-item"><a {% if not page_obj.has_next %} disabled {% else %} href="?page={{ page_obj.next_page_number }}" {% endif %} class="page-link" >Next</a></li>
+  </ul>
+</nav>

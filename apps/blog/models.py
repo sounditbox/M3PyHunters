@@ -41,6 +41,9 @@ class Comment(models.Model):
     def __str__(self):
         return f'Comment {self.content}'
 
+    class Meta:
+        ordering = ['-created_at']
+
 
 class Tag(models.Model):
     name = models.CharField(max_length=100)

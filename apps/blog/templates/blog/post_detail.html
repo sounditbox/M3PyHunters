@@ -18,7 +18,7 @@
     </article>
 
     <a class="btn btn-primary" href="{% url 'blog:comments' post.id %}">
-        View comments
+        View comments ({{ comment_data.total_comments }})
     </a>
     <a class="btn btn-secondary" href="{% url 'blog:post_update' post.id %}">
         Update

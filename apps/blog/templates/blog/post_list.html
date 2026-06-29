@@ -24,6 +24,9 @@
                 <span>{{ post.views|default:0 }}</span>
                 <img src="{% static 'thumbs-up.svg' %}" alt="" width="20" height="20">
                 <span>{{ post.likes|default:0 }}</span>
+                <img src="{% static 'comment.svg' %}" alt="" width="20"
+                     height="20">
+                <span>{{ post.total_comments }}</span>
             </div>
         </li>
         {% empty %}
@@ -32,6 +35,8 @@
         </li>
         {% endfor %}
     </ul>
+
+ {% include 'includes/pagination.html' %}
 </div>
 
 {% endblock %}

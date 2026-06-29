@@ -13,9 +13,12 @@
         <div class="border-bottom py-3">
             <p class="mb-0">{{ comment.content|linebreaksbr }}</p>
         </div>
+
     {% empty %}
         <p>No comments found.</p>
     {% endfor %}
+    {% include 'includes/pagination.html' %}
+
 
     <h2 class="h4 mt-4">Create new comment</h2>
     <form action="{% url 'blog:comments' post_id %}" class="d-flex flex-column" method="post">
