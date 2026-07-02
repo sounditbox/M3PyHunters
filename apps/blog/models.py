@@ -26,6 +26,8 @@ class Post(models.Model):
 
     class Meta:
         ordering = ['-created_at']
+        verbose_name = 'Пост'
+        verbose_name_plural = 'Посты'
 
 
 class Comment(models.Model):
@@ -43,6 +45,8 @@ class Comment(models.Model):
 
     class Meta:
         ordering = ['-created_at']
+        verbose_name = 'Комментарий'
+        verbose_name_plural = 'Комментарии'
 
 
 class Tag(models.Model):
