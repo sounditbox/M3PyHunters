@@ -1,10 +1,10 @@
 from django.db.models import Count, Sum, Avg, Max, Min, Q, F
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, ListView, CreateView, UpdateView, \
-    DeleteView
+    DeleteView, FormView
 
-from apps.blog.forms import PostCreateForm
+from apps.blog.forms import PostCreateForm, FeedbackForm, CommentCreateForm
 from apps.blog.models import Post, Comment
 
 
@@ -46,6 +46,27 @@ class PostCreateView(CreateView):
     template_name = 'create_post.html'
 
 
+def post_create(request):
+    form = PostCreateForm()
+
+    if request.method == 'POST':
+        form = PostCreateForm(request.POST)
+        if form.is_valid():
+            Post.objects.create(**form.cleaned_data)
+            return redirect('blog:post_list')
+    return render(request, 'create_post.html', {'form': form})
+
+
+class FeedbackView(FormView):
+    form_class = FeedbackForm
+    success_url = reverse_lazy('blog:post_list')
+    template_name = 'blog/feedback.html'
+
+    def form_valid(self, form):
+        name, email, message = form.cleaned_data.values()
+        print(f'{name} ({email}) написал: {message}')
+        return super().form_valid(form)
+
 class PostDeleteView(DeleteView):
     model = Post
     success_url = reverse_lazy('blog:post_list')
@@ -61,10 +82,15 @@ class PostUpdateView(UpdateView):
     pk_url_kwarg = 'post_id'
 
 
-class CommentListView(ListView):
+class CommentListView(CreateView, ListView):
     model = Comment
     context_object_name = 'comments'
     paginate_by = 2
+    template_name = 'blog/comment_list.html'
+    form_class = CommentCreateForm
+
+    def get_success_url(self):
+        return reverse_lazy('blog:comment_list', kwargs={'post_id': self.kwargs['post_id']})
 
     def get_queryset(self):
         return Comment.objects.filter(post_id=self.kwargs['post_id'])
@@ -73,8 +99,3 @@ class CommentListView(ListView):
         context['post_id'] = self.kwargs['post_id']
         return super().get_context_data(**context)
 
-    def post(self, request, post_id):
-        content = request.POST.get('content')
-        post = Post.objects.get(id=post_id)
-        Comment.objects.create(content=content, post=post)
-        return redirect('blog:comments', post_id=post_id)

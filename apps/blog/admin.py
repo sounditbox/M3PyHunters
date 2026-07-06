@@ -1,6 +1,7 @@
 from django.contrib import admin
 from unfold.admin import TabularInline, StackedInline, ModelAdmin
 
+from apps.blog.forms import CommentCreateForm
 from apps.blog.models import Post, Comment, Tag
 
 
@@ -9,6 +10,7 @@ class CommentInline(TabularInline):
     extra = 0
     readonly_fields = ('created_at', 'updated_at')
     classes = ('collapse',)
+    form = CommentCreateForm
 
 
 class TagInline(StackedInline):

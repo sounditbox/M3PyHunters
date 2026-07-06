@@ -20,6 +20,10 @@
                     <a href="{% url 'blog:post_list' %}"
                        class="nav-link px-2 text-white">Posts</a>
                 </li>
+                <li>
+                    <a href="{% url 'blog:feedback' %}"
+                       class="nav-link px-2 text-white">Feedback</a>
+                </li>
             </ul>
             {% if user.is_authenticated %}
                 <span class="btn btn-secondary disabled" aria-disabled="true">
