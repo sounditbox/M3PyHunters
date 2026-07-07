@@ -3,7 +3,6 @@
 {% block title %}Create new post | {{ site_name }}{% endblock %}
 
 {% block content %}
-
 <div class="container">
     <h2>Create new post</h2>
     <form action="{% url 'blog:post_create' %}" method="post">
@@ -14,7 +13,9 @@
                 {{ field }}
                 {% if field.errors %}
                     <div style="color: red;">
-                        {{ field.errors }}
+                        {% for error in field.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
                     </div>
                 {% endif %}
             </div>

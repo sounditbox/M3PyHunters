@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 
+from django.contrib import messages
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -106,3 +107,10 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 SITE_NAME = 'PyBlog'
 
+# Bootstrap classes for alerts
+MESSAGE_TAGS = {
+    messages.SUCCESS: 'alert alert-success',
+    messages.ERROR: 'alert alert-danger',
+    messages.WARNING: 'alert alert-warning',
+    messages.INFO: 'alert alert-info'
+}

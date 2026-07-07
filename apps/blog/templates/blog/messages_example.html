@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<form method="post">
+    {% csrf_token %}
+    <select name="message_type">
+        <option value="primary">primary</option>
+        <option value="secondary">secondary</option>
+        <option value="info">info</option>
+        <option value="success">success</option>
+        <option value="warning">warning</option>
+        <option value="danger">danger</option>
+        <option value="light">light</option>
+        <option value="dark">dark</option>
+    </select>
+    <button type="submit">Submit</button>
+</form>
+{% endblock %}
