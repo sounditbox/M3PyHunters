@@ -1,7 +1,6 @@
 import os
 from pathlib import Path
 
-from django.conf.global_settings import LOGIN_REDIRECT_URL
 from django.contrib import messages
 from django.urls import reverse_lazy
 from dotenv import load_dotenv
@@ -116,6 +115,6 @@ MESSAGE_TAGS = {
     messages.WARNING: 'alert alert-warning',
     messages.INFO: 'alert alert-info'
 }
-
+LOGIN_URL = reverse_lazy('users:login')
 LOGIN_REDIRECT_URL = reverse_lazy('blog:post_list')
 LOGOUT_REDIRECT_URL = reverse_lazy('blog:post_list')

@@ -1,4 +1,6 @@
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Count, Q, F
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
@@ -42,7 +44,8 @@ class PostListView(ListView):
     paginate_by = 10
 
 
-class PostCreateView(MessagesOnFormProcessingMixin, CreateView):
+class PostCreateView(MessagesOnFormProcessingMixin, LoginRequiredMixin,
+                     CreateView):
     model = Post
     form_class = PostCreateForm
     success_url = reverse_lazy('blog:post_list')
@@ -55,6 +58,7 @@ class PostCreateView(MessagesOnFormProcessingMixin, CreateView):
         return super().form_valid(form)
 
 
+@login_required
 def post_create(request):
     form = PostCreateForm()
 
@@ -72,16 +76,6 @@ def post_create(request):
     return render(request, 'create_post.html', {'form': form})
 
 
-class MessagesExampleView(TemplateView):
-    template_name = 'blog/messages_example.html'
-
-    def post(self, request, *args, **kwargs):
-        selected = self.request.POST.get('message_type')
-        messages.add_message(self.request, 40, f'This is a {selected} message',
-                             extra_tags='alert alert-' + selected)
-        return redirect('blog:messages_example')
-
-
 class FeedbackView(SuccessMessageOnFormValidMixin, FormView):
     form_class = FeedbackForm
     success_url = reverse_lazy('blog:post_list')
@@ -94,7 +88,8 @@ class FeedbackView(SuccessMessageOnFormValidMixin, FormView):
         return super().form_valid(form)
 
 
-class PostDeleteView(MessagesOnFormProcessingMixin, DeleteView):
+class PostDeleteView(MessagesOnFormProcessingMixin, LoginRequiredMixin,
+                     DeleteView):
     model = Post
     success_url = reverse_lazy('blog:post_list')
     template_name = 'delete_post.html'
@@ -103,7 +98,8 @@ class PostDeleteView(MessagesOnFormProcessingMixin, DeleteView):
     error_message = 'Failed to delete post'
 
 
-class PostUpdateView(MessagesOnFormProcessingMixin, UpdateView):
+class PostUpdateView(MessagesOnFormProcessingMixin, LoginRequiredMixin,
+                     UpdateView):
     model = Post
     form_class = PostCreateForm
     success_url = reverse_lazy('blog:post_list')
@@ -136,4 +132,10 @@ class CommentListView(MessagesOnFormProcessingMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.post_id = self.kwargs['post_id']
+        form.instance.author = self.request.user
         return super().form_valid(form)
+
+    def post(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('users:login')
+        return super().post(request, *args, **kwargs)

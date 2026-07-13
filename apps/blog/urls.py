@@ -13,7 +13,6 @@ urlpatterns = [
     path('posts/<int:post_id>/comments/', CommentListView.as_view(),
          name='comments'),
 
-    path('messages_example/', MessagesExampleView.as_view(), name='messages_example'),
 
 ]
 
