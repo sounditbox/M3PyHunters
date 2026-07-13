@@ -5,11 +5,14 @@
 <div class="container">
     <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-4">
         <h1 class="display-5 mb-0">{{ title }}</h1>
+        {% if request.user.is_authenticated %}
         <a class="btn btn-primary" href="{% url 'blog:post_create' %}">Create post</a>
+        {% endif %}
     </div>
     <ul class="list-group list-unstyled">
         {% for post in posts %}
         <li class="list-group-item">
+            <p>{{ post.author }} | {{ post.created_at|date }}</p>
             <h2 class="h4">{{ post.title }}</h2>
             {% for t in post.tags.all %}
             <span class="badge rounded-pill text-bg-info">{{ t.name }}</span>
@@ -31,12 +34,13 @@
         </li>
         {% empty %}
         <li class="list-group-item">
-            <p class="mb-0">No posts found.</p>
+            <p class="mb-0">No posts yet.</p>
         </li>
         {% endfor %}
     </ul>
-
+{% if posts %}
  {% include 'includes/pagination.html' %}
+{% endif %}
 </div>
 
 {% endblock %}

@@ -9,6 +9,7 @@
                 <span class="fs-4">{{ site_name }}</span>
             </a>
             <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+            {% if request.user.is_authenticated %}
                 <li>
                     <a href="{% url 'blog:post_create' %}"
                        class="nav-link px-2 text-white">
@@ -16,6 +17,7 @@
                         Create
                     </a>
                 </li>
+            {% endif %}
                 <li>
                     <a href="{% url 'blog:post_list' %}"
                        class="nav-link px-2 text-white">Posts</a>
@@ -30,8 +32,20 @@
                     <img src="{% static 'user.svg' %}" alt="" width="20" height="20">
                     {{ user.username }}
                 </span>
+                <form action="{% url 'users:logout' %}" method="post">
+                <button type="submit" class="nav-link px-2 text-white">
+                    {% csrf_token %}
+                    <img src="{% static 'logout.svg' %}" alt="" width="20" height="20">
+                    Logout
+                </button>
+                </form>
             {% else %}
-                <span class="text-white-50 small">Guest</span>
+                <a href="{% url 'users:login' %}" class="nav-link px-2 text-white">
+                    Login
+                </a>
+                <a href="{% url 'users:register' %}" class="nav-link px-2 text-white">
+                    Register
+                </a>
             {% endif %}
         </nav>
     </div>

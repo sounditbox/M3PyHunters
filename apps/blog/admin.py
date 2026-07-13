@@ -8,7 +8,7 @@ from apps.blog.models import Post, Comment, Tag
 class CommentInline(TabularInline):
     model = Comment
     extra = 0
-    readonly_fields = ('created_at', 'updated_at')
+    readonly_fields = ('created_at', 'updated_at', 'author')
     classes = ('collapse',)
     form = CommentCreateForm
 
@@ -22,9 +22,9 @@ class TagInline(StackedInline):
 @admin.register(Post)
 class PostAdmin(ModelAdmin):
     list_display = ('id', 'title', 'status', 'created_at', 'updated_at',
-                    'popularity', 'comments_count')
+                    'popularity', 'comments_count', 'author')
     list_display_links = ('id',)
-    list_filter = ('status', 'created_at', 'updated_at')
+    list_filter = ('status', 'created_at', 'updated_at', 'author')
     list_per_page = 10
     list_max_show_all = 1000
     list_editable = ('status',)
@@ -35,7 +35,7 @@ class PostAdmin(ModelAdmin):
     inlines = (CommentInline, TagInline)
 
     fieldsets = (
-        ('Main Information', {'fields': ('title', 'status')}),
+        ('Main Information', {'fields': ('title', 'status', 'author')}),
         ('Content', {'fields': ('content',), 'classes': ('collapse',)}),
         ('Statistics', {'fields': ('likes', 'views', 'popularity')}),
         ('Important Dates', {'fields': ('created_at', 'updated_at')})
@@ -70,9 +70,9 @@ class PostAdmin(ModelAdmin):
 
 @admin.register(Comment)
 class CommentAdmin(ModelAdmin):
-    list_display = ('id', 'content', 'created_at', 'updated_at', 'post')
+    list_display = ('id', 'content', 'created_at', 'updated_at', 'post', 'author')
     list_display_links = ('id',)
-    list_filter = ('created_at', 'updated_at')
+    list_filter = ('created_at', 'updated_at', 'author', 'post')
     list_per_page = 10
     list_editable = ('post',)
     search_fields = ('content',)
