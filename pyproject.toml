@@ -10,4 +10,5 @@ dependencies = [
     "django-unfold>=0.99.0",
     "dotenv>=0.9.9",
     "ipython>=9.14.1",
+    "pillow>=12.3.0",
 ]

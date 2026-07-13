@@ -36,7 +36,7 @@ class PostAdmin(ModelAdmin):
 
     fieldsets = (
         ('Main Information', {'fields': ('title', 'status', 'author')}),
-        ('Content', {'fields': ('content',), 'classes': ('collapse',)}),
+        ('Content', {'fields': ('content', 'cover'), 'classes': ('collapse',)}),
         ('Statistics', {'fields': ('likes', 'views', 'popularity')}),
         ('Important Dates', {'fields': ('created_at', 'updated_at')})
     )

@@ -21,6 +21,9 @@
             {% for t in post.tags.all %}
             <span class="badge rounded-pill text-bg-info">{{ t.name }}</span>
         {% endfor %}
+        {% if post.cover %}
+            <img src="{{ post.cover.url }}" alt="Post cover" class="img-fluid">
+        {% endif %}
         <p>{{ post.content|linebreaksbr }}</p>
     </article>
 

@@ -17,6 +17,9 @@
             {% for t in post.tags.all %}
             <span class="badge rounded-pill text-bg-info">{{ t.name }}</span>
             {% endfor %}
+            {% if post.cover %}
+                <img src="{{ post.cover.url }}" alt="Post cover" class="img-fluid">
+            {% endif %}
             <p>{{ post.content|truncatewords:50 }}</p>
             <p>Posted {{ post.created_at|timesince }} ago.</p>
             <a class="btn btn-outline-primary" href="{% url 'blog:post_detail' post.id %}">

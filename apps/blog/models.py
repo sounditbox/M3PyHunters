@@ -24,6 +24,7 @@ class Post(models.Model):
 
     author = models.ForeignKey(get_user_model(), on_delete=models.CASCADE,
                                related_name='posts')
+    cover = models.ImageField(upload_to='post_covers', blank=True, null=True)
 
     def __str__(self):
         return f'Post {self.title}'

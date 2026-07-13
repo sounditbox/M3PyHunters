@@ -11,7 +11,7 @@ class PostCreateForm(forms.ModelForm):
 
     class Meta:
         model = Post
-        fields = ['title', 'content']
+        fields = ['title', 'content', 'cover']
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control'}),
             'content': forms.Textarea(
@@ -19,7 +19,8 @@ class PostCreateForm(forms.ModelForm):
         }
         labels = {
             'title': 'Title',
-            'content': 'Content'
+            'content': 'Content',
+            'cover': 'Cover'
         }
         error_messages = {
             'title': {
