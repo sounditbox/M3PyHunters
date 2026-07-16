@@ -2,11 +2,11 @@
 
 {% block content %}
 <div class="container">
-    <form method="post">
+    <form method="post" class="form" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
         <p>Already have an account? <a href="{% url 'users:login' %}">login</a></p>
-        <button type="submit">Register</button>
+        <button type="submit" class="btn btn-primary">Register</button>
     </form>
 </div>
 {% endblock %}

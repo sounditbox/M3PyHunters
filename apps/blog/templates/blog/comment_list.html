@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}Comments for post {{ post.title }} | {{ site_name }}{% endblock %}
 
@@ -18,10 +19,17 @@
                                 <div class="col">
                                     {% for comment in comments.all %}
                                         <div class="d-flex flex-start mb-4">
+                                            {% if comment.author.avatar %}
                                             <img class="rounded-circle shadow-1-strong me-3"
-                                                 src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(10).webp"
+                                                 src="{{ comment.author.avatar.url }}"
                                                  alt="avatar" width="65"
-                                                 height="65"/>
+                                                 height="65">
+                                            {% else %}
+                                            <img class="rounded-circle shadow-1-strong me-3"
+                                                 src="{% static 'user.svg' %}"
+                                                 alt="avatar" width="65"
+                                                 height="65">
+                                            {% endif %}
                                             <div class="flex-grow-1 flex-shrink-1">
                                                 <div>
                                                     <div class="d-flex justify-content-between align-items-center">
