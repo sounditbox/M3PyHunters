@@ -1,9 +1,11 @@
 from django import forms
+from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import (
     AuthenticationForm,
     UserCreationForm,
-    UsernameField,
+    UsernameField, UserChangeForm,
 )
+from django.forms import ModelForm
 
 from apps.users.models import User
 
@@ -15,6 +17,24 @@ class LoginForm(AuthenticationForm):
         strip=False,
         widget=forms.PasswordInput(attrs={"autocomplete": "current-password", 'class': 'form-control'}),
     )
+
+
+class EditProfileForm(ModelForm):
+    class Meta:
+        model = get_user_model()
+        fields = ['avatar', 'first_name', 'last_name']
+        widgets = {
+            'avatar': forms.FileInput(attrs={'class': 'form-control'}),
+            'first_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control'}),
+        }
+        labels = {
+            'avatar': 'Avatar',
+            'first_name': 'First Name',
+            'last_name': 'Last Name',
+        }
+
+
 
 
 class RegistrationForm(UserCreationForm):

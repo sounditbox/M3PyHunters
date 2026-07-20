@@ -16,6 +16,7 @@ class PostCreateForm(forms.ModelForm):
             'title': forms.TextInput(attrs={'class': 'form-control'}),
             'content': forms.Textarea(
                 attrs={'class': 'form-control', 'rows': 6}),
+            'cover': forms.FileInput(attrs={'class': 'form-control'}),
         }
         labels = {
             'title': 'Title',

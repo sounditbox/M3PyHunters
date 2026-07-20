@@ -28,10 +28,12 @@
                 </li>
             </ul>
             {% if user.is_authenticated %}
-                <span class="btn btn-secondary disabled" aria-disabled="true">
+            <a href="{% url 'users:profile' user.id %}"> <span
+                    class="btn btn-secondary">
                     <img src="{% static 'user.svg' %}" alt="" width="20" height="20">
                     {{ user.username }}
                 </span>
+            </a>
                 <form action="{% url 'users:logout' %}" method="post">
                 <button type="submit" class="nav-link px-2 text-white">
                     {% csrf_token %}

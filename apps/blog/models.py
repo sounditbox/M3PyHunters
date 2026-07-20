@@ -39,7 +39,7 @@ class Comment(models.Model):
     post = models.ForeignKey(
         'Post',
         on_delete=models.CASCADE,
-        related_name='comments', # tag_set
+        related_name='comments',  # tag_set
     )
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
@@ -47,7 +47,6 @@ class Comment(models.Model):
 
     author = models.ForeignKey(get_user_model(), on_delete=models.CASCADE,
                                related_name='comments')
-
 
     def __str__(self):
         return f'Comment {self.content}'

@@ -11,17 +11,10 @@
     </a>
     <article>
         <p>
-            {% if post.author.avatar %}
             <img class="rounded-circle shadow-1-strong me-3"
-                 src="{{ post.author.avatar.url }}"
+                 src="{% if post.author.avatar %}{{ post.author.avatar.url }}{% else %}{% static 'user.svg' %}{% endif %}"
                  alt="avatar" width="20"
                  height="20">
-            {% else %}
-            <img class="rounded-circle shadow-1-strong me-3"
-                 src="{% static 'user.svg' %}"
-                 alt="avatar" width="20"
-                 height="20">
-            {% endif %}
             {{ post.author }} | {{ post.created_at|date }}</p>
 
         <h1 class="display-5">{{ post.title }}</h1>

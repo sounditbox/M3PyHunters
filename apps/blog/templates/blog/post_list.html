@@ -12,16 +12,20 @@
     <ul class="list-group list-unstyled">
         {% for post in posts %}
         <li class="list-group-item">
+            <a href="{% url 'users:profile' post.author.id %}" style="text-decoration: none;">
             <p>
                 {% if post.author.avatar %}
-                <img src="{{ post.author.avatar.url }}" class="rounded-circle"
+                <img src="{% if post.author.avatar %}{{ post.author.avatar.url }}{% else %}{% static 'user.svg' %}{% endif %}"
+                     class="rounded-circle"
                      alt="Post author avatar" width="20" height="20">
                 {% else %}
                 <img src="{% static 'user.svg' %}" class="rounded-circle"
                      alt="Post author avatar" width="20" height="20">
                 {% endif %}
-                {{ post.author }} | {{ post.created_at|date }}
+                {{ post.author }}
             </p>
+            </a>
+            <p>{{ post.created_at }}</p>
             <h2 class="h4">{{ post.title }}</h2>
             {% for t in post.tags.all %}
             <span class="badge rounded-pill text-bg-info">{{ t.name }}</span>
