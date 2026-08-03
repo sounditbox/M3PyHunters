@@ -31,6 +31,14 @@ class Post(models.Model):
 
     class Meta:
         ordering = ['-created_at']
+        indexes = [
+            models.Index(fields=['status'], name='blog_post_status_idx'),
+            models.Index(fields=['title'], name='blog_post_title_idx'),
+            models.Index(fields=['created_at'], name='blog_post_created_idx'),
+            models.Index(fields=['updated_at'], name='blog_post_updated_idx'),
+            models.Index(fields=['likes'], name='blog_post_likes_idx'),
+            models.Index(fields=['views'], name='blog_post_views_idx'),
+        ]
         verbose_name = 'Пост'
         verbose_name_plural = 'Посты'
 

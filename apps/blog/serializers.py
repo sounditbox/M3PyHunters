@@ -20,8 +20,8 @@ class CommentSerializer(serializers.ModelSerializer):
 
 
 class FullPostSerializer(serializers.ModelSerializer):
-    author = AuthorSerializer()
-    comments = CommentSerializer(many=True)
+    author = AuthorSerializer(read_only=True)
+    comments = CommentSerializer(many=True, read_only=True)
 
     class Meta:
         model = Post
@@ -35,7 +35,10 @@ class ShortPostSerializer(serializers.ModelSerializer):
 
 
 class CreatePostSerializer(serializers.ModelSerializer):
-    user_agreement = serializers.BooleanField(validators=[agreed_to_terms])
+    user_agreement = serializers.BooleanField(
+        validators=[agreed_to_terms], write_only=True
+    )
+    author = AuthorSerializer(read_only=True)
 
     class Meta:
         model = Post
@@ -48,9 +51,7 @@ class CreatePostSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         validated_data.pop('user_agreement')
-        post = super().create(validated_data)
-        post.save()
-        return post
+        return super().create(validated_data)
 
 
 class PartialUpdatePostSerializer(serializers.ModelSerializer):

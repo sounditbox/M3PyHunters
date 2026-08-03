@@ -1,44 +1,44 @@
-from rest_framework.response import Response
-from rest_framework.views import APIView
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
+from apps.blog.filters import PostFilter
 from apps.blog.models import Post
+from apps.blog.permissions import IsAuthorOrReadOnly
 from apps.blog.serializers import FullPostSerializer, ShortPostSerializer, \
     CreatePostSerializer, PartialUpdatePostSerializer
 
 
-class PostListApiView(APIView):
+class PostListApiView(ListCreateAPIView):
+    queryset = Post.objects.select_related('author').prefetch_related('tags')
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter,
+                       filters.OrderingFilter]
+    filterset_class = PostFilter
+    search_fields = ['title', 'content', '=author__username',
+                     '^author__email']
+    ordering_fields = ['title', 'created_at', 'updated_at', 'likes', 'views']
+    ordering = ['-created_at']
 
-    def get(self, request):
-        posts = [ShortPostSerializer(p).data for p in Post.objects.all()]
-        return Response({"posts": posts})
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return CreatePostSerializer
+        return ShortPostSerializer
 
-    def post(self, request):
-        instance = CreatePostSerializer(data=request.data)
-        instance.is_valid(raise_exception=True)
-        instance.save()
-        return Response(status=201, data={"created": True})
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
 
 
-class PostDetailApiView(APIView):
-    def get(self, request, post_id):
-        post = Post.objects.get(id=post_id)
-        return Response({"post": FullPostSerializer(post).data})
+class PostDetailApiView(RetrieveUpdateDestroyAPIView):
+    queryset = Post.objects.select_related('author').prefetch_related(
+        'comments__author', 'tags'
+    )
+    serializer_class = FullPostSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly, IsAuthorOrReadOnly]
+    lookup_url_kwarg = 'post_id'
 
-    def patch(self, request, post_id):
-        post = Post.objects.get(id=post_id)
-        instance = PartialUpdatePostSerializer(post, data=request.data)
-        instance.is_valid(raise_exception=True)
-        instance.save()
-        return Response(status=200, data={"updated": True})
-
-    def put(self, request, post_id):
-        post = Post.objects.get(id=post_id)
-        instance = FullPostSerializer(post, data=request.data)
-        instance.is_valid(raise_exception=True)
-        instance.save()
-        return Response(status=200, data={"updated": True})
-
-    def delete(self, request, post_id):
-        post = Post.objects.get(id=post_id)
-        post.delete()
-        return Response(status=200, data={"deleted": True})
+    def get_serializer_class(self):
+        if self.request.method == 'PATCH':
+            return PartialUpdatePostSerializer
+        return FullPostSerializer
