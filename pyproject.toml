@@ -14,4 +14,12 @@ dependencies = [
     "dotenv>=0.9.9",
     "ipython>=9.14.1",
     "pillow>=12.3.0",
+    "pytest>=9.1.1",
+    "pytest-cov>=7.1.0",
+    "pytest-django>=4.14.0",
 ]
+
+[tool.pytest]
+python_files = ["test_*.py", "*_test.py", 'tests.py']
+DJANGO_SETTINGS_MODULE = "config.settings"
+addopts = ["--cov", "--cov-report=html"]
