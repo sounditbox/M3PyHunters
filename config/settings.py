@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'drf_spectacular',
+    'graphene_django',
 
     'rest_framework',
     'rest_framework.authtoken',
@@ -148,4 +149,8 @@ SPECTACULAR_SETTINGS = {
     'VERSION': '0.1.0',
     'SERVE_INCLUDE_SCHEMA': False,
     # OTHER SETTINGS
+}
+
+GRAPHENE = {
+    'SCHEMA': '_graphql.schema.schema',
 }

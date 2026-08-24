@@ -2,8 +2,10 @@ from debug_toolbar.toolbar import debug_toolbar_urls
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
+from django.views.decorators.csrf import csrf_exempt
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView, \
     SpectacularRedocView
+from graphene_django.views import GraphQLView
 from rest_framework.authtoken.views import obtain_auth_token
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
@@ -38,6 +40,9 @@ urlpatterns = (
             path('api/schema/redoc/',
                  SpectacularRedocView.as_view(url_name='schema'),
                  name='redoc'),
+
+            # Graphene
+            path('graphql/', csrf_exempt(GraphQLView.as_view(graphiql=True))),
         ] + debug_toolbar_urls())
 
 if settings.DEBUG:
